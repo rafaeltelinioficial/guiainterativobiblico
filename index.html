@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hub de Teologia Prática | Guia Interativo</title>
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-main: #07090e;
+            --bg-card: rgba(15, 21, 33, 0.85);
+            --gold-primary: #d6b24a;
+            --gold-light: #fef08a;
+            --gold-dark: #855d10;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: rgba(214, 178, 74, 0.2);
+            --font-title: 'Cinzel', serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+            --radius: 16px;
+            --transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(214, 178, 74, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(30, 41, 59, 0.3) 0%, transparent 50%);
+        }
+
+        /* Menu Lateral Estilo App */
+        aside {
+            width: 300px;
+            background: rgba(10, 13, 20, 0.95);
+            border-right: 1px solid var(--border-color);
+            padding: 32px 20px;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+        }
+
+        .app-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 36px;
+            padding-left: 8px;
+        }
+
+        .app-brand i {
+            color: var(--gold-primary);
+            font-size: 1.8rem;
+        }
+
+        .app-brand h2 {
+            font-family: var(--font-title);
+            font-size: 1rem;
+            letter-spacing: 1px;
+            color: #fff;
+            line-height: 1.2;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow-y: auto;
+        }
+
+        .nav-item button {
+            width: 100%;
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            padding: 12px 16px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.9rem;
+            font-family: var(--font-body);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: left;
+        }
+
+        .nav-item button:hover, .nav-item button.active {
+            background: rgba(214, 178, 74, 0.08);
+            color: var(--gold-primary);
+            border-color: var(--border-color);
+        }
+
+        .nav-item button i {
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Painel Principal */
+        main {
+            margin-left: 300px;
+            flex: 1;
+            padding: 40px;
+            max-width: 1200px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header-title {
+            margin-bottom: 32px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 20px;
+        }
+
+        .header-title h1 {
+            font-family: var(--font-title);
+            font-size: 2.2rem;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .header-title p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Cards & Layout Grid */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+            backdrop-filter: blur(12px);
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .highlight-box {
+            border-left: 4px solid var(--gold-primary);
+            background: rgba(214, 178, 74, 0.05);
+            padding: 18px 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 16px 0;
+        }
+
+        .table-custom {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        .table-custom th, .table-custom td {
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .table-custom th {
+            background: rgba(214, 178, 74, 0.1);
+            color: var(--gold-primary);
+            font-family: var(--font-title);
+        }
+
+        .table-custom td {
+            color: var(--text-muted);
+        }
+
+        /* Formulário de Estudo */
+        .ficha-form label {
+            display: block;
+            margin: 16px 0 8px;
+            color: var(--gold-light);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .ficha-form input, .ficha-form textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            color: #fff;
+            font-family: var(--font-body);
+            resize: vertical;
+        }
+
+        .btn-salvar {
+            margin-top: 20px;
+            background: linear-gradient(135deg, var(--gold-primary), var(--gold-dark));
+            border: none;
+            color: #000;
+            font-weight: 700;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-salvar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(214, 178, 74, 0.3);
+        }
+
+        @media (max-width: 900px) {
+            body { flex-direction: column; }
+            aside { width: 100%; height: auto; position: relative; }
+            main { margin-left: 0; padding: 20px; }
+            .grid-3, .grid-2 { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Menu Lateral -->
+    <aside>
+        <div class="app-brand">
+            <i class="fa-solid fa-book-bible"></i>
+            <h2>HUB DE TEOLOGIA PRÁTICA</h2>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <button class="active" onclick="switchTab('fundamentos')">
+                    <i class="fa-solid fa-brain"></i> 01. Fundamentos
+                </button>
+            </li>
+            <li class="nav-item">
+                <button onclick="switchTab('hermeneutica')">
+                    <i class="fa-solid fa-scale-balanced"></i> 02. Hermenêutica
+                </button>
+            </li>
+            <li class="nav-item">
+                <button onclick="switchTab('camadas')">
+                    <i class="fa-solid fa-layer-group"></i> 03. Camadas do Contexto
+                </button>
+            </li>
+            <li class="nav-item">
+                <button onclick="switchTab('metodo')">
+                    <i class="fa-solid fa-magnifying-glass"></i> 04. Método Indutivo
+                </button>
+            </li>
+            <li class="nav-item">
+                <button onclick="switchTab('at')">
+                    <i class="fa-solid fa-scroll"></i> 05. Antigo Testamento
+                </button>
+            </li>
+            <li class="nav-item">
+                <button onclick="switchTab('nt')">
+                    <i class="fa-solid fa-cross"></i> 06. Novo Testamento
+                </button>
+            </li>
+            <li class="nav-item">
+                <button onclick="switchTab('plano')">
+                    <i class="fa-solid fa-calendar-days"></i> 07. Plano 52 Semanas
+                </button>
+            </li>
+            <li class="nav-item">
+                <button onclick="switchTab('ficha')">
+                    <i class="fa-solid fa-pen-to-square"></i> 08. Ficha Interativa
+                </button>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Conteúdo Dinâmico -->
+    <main>
+
+        <!-- MÓDULO 01 -->
+        <section id="fundamentos" class="tab-content active">
+            <div class="header-title">
+                <h1>01. Preparação Mental, Cultural e Espiritual</h1>
+                <p>Superando barreiras históricas para ler as Escrituras com maturidade.</p>
+            </div>
+            
+            <div class="card">
+                <h3 style="color: var(--gold-primary); margin-bottom: 12px;">Transpondo Distâncias Milenares</h3>
+                <p style="color: var(--text-muted); line-height: 1.7;">
+                    A Bíblia Sagrada foi escrita por cerca de 40 autores ao longo de 1.500 anos em contextos culturais totalmente distintos dos dias atuais[cite: 2]. Para compreendê-la, é preciso evitar uma leitura anacrônica (avaliar o passado com a mente do século XXI)[cite: 2].
+                </p>
+
+                <div class="grid-2" style="margin-top: 20px;">
+                    <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 10px;">
+                        <h4 style="color: #fff;"><i class="fa-solid fa-check-circle" style="color: #22c55e;"></i> Exegese (Prática Correta)</h4>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">
+                            "Extrair" a mensagem original a partir da análise da gramática, história e intenção do autor sagrado[cite: 2].
+                        </p>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: 10px;">
+                        <h4 style="color: #fff;"><i class="fa-solid fa-times-circle" style="color: #ef4444;"></i> Eisegese (Erro Mortal)</h4>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">
+                            "Injetar" preconceitos ou opiniões pessoais no texto, fazendo-o dizer o que o leitor deseja[cite: 2].
+                        </p>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong style="color: var(--gold-light);">Regra de Ouro:</strong> "A Bíblia nunca pode significar hoje o que ela jamais significou para o seu autor e leitores originais."[cite: 2]
+                </div>
+            </div>
+        </section>
+
+        <!-- MÓDULO 02 -->
+        <section id="hermeneutica" class="tab-content">
+            <div class="header-title">
+                <h1>02. Princípios de Hermenêutica Bíblica</h1>
+                <p>Regras fundamentais para evitar interpretações equivocadas.</p>
+            </div>
+
+            <div class="card">
+                <div class="grid-3">
+                    <div>
+                        <h4 style="color: var(--gold-primary);">Regra 01: Analogia da Fé</h4>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">A Bíblia interpreta a si mesma. Textos obscuros são iluminados por textos claros[cite: 2].</p>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--gold-primary);">Regra 02: Soberania do Contexto</h4>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">Um versículo fora do contexto torna-se pretexto para heresias[cite: 2].</p>
+                    </div>
+                    <div>
+                        <h4 style="color: var(--gold-primary);">Regra 03: Gênero Literário</h4>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 8px;">Respeite os gêneros: leia poesia como poesia, narrativa como história e profecia como profecia[cite: 2].</p>
+                    </div>
+                </div>
+
+                <h3 style="color: #fff; margin-top: 28px;">Estudo de Caso: Filipenses 4:13</h3>
+                <p style="color: var(--text-muted); margin-top: 8px; line-height: 1.7;">
+                    A expressão "Tudo posso naquele que me fortalece" é frequentemente usada como promessa de conquistas financeiras ou pessoais[cite: 2]. Contudo, no contexto original (Fp 4:11-12), o apóstolo Paulo refere-se ao <strong>contentamento</strong>: aprender a viver satisfeito tanto na fartura quanto na privação extrema[cite: 2].
+                </p>
+            </div>
+        </section>
+
+        <!-- MÓDULO 03 -->
+        <section id="camadas" class="tab-content">
+            <div class="header-title">
+                <h1>03. As Três Camadas do Contexto</h1>
+                <p>Compreenda a profundidade do cenário bíblico.</p>
+            </div>
+
+            <div class="card">
+                <ul style="list-style: none; display: flex; flex-direction: column; gap: 16px;">
+                    <li style="border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px;">
+                        <strong style="color: var(--gold-light);">1. Contexto Literário:</strong> Envolve o parágrafo anterior, o capítulo e o objetivo geral do livro[cite: 2].
+                    </li>
+                    <li style="border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px;">
+                        <strong style="color: var(--gold-light);">2. Contexto Histórico-Cultural:</strong> Abrange o ambiente político, econômico, hábitos sociais e a época do autor[cite: 2].
+                    </li>
+                    <li>
+                        <strong style="color: var(--gold-light);">3. Contexto Redentivo-Teológico:</strong> Conecta a passagem ao plano geral da salvação centralizado na pessoa de Jesus Cristo[cite: 2].
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- MÓDULO 04 -->
+        <section id="metodo" class="tab-content">
+            <div class="header-title">
+                <h1>04. O Método Indutivo de Estudo</h1>
+                <p>Passo a passo científico em 3 etapas simples.</p>
+            </div>
+
+            <div class="grid-3">
+                <div class="card">
+                    <h3 style="color: var(--gold-primary);"><i class="fa-solid fa-eye"></i> 1. Observação</h3>
+                    <p style="color: var(--text-muted); margin-top: 10px; font-size: 0.9rem;">
+                        <strong>O que o texto diz?</strong> Mapeie personagens, locais, verbos, termos repetidos e conectivos lógicos (ex: "portanto", "mas")[cite: 2].
+                    </p>
+                </div>
+                <div class="card">
+                    <h3 style="color: var(--gold-primary);"><i class="fa-solid fa-brain"></i> 2. Interpretação</h3>
+                    <p style="color: var(--text-muted); margin-top: 10px; font-size: 0.9rem;">
+                        <strong>O que o texto significava?</strong> Descubra a intenção original do autor para com os seus primeiros ouvintes[cite: 2].
+                    </p>
+                </div>
+                <div class="card">
+                    <h3 style="color: var(--gold-primary);"><i class="fa-solid fa-heart"></i> 3. Aplicação</h3>
+                    <p style="color: var(--text-muted); margin-top: 10px; font-size: 0.9rem;">
+                        <strong>Como afeta minha vida?</strong> Extraia princípios atemporais e transforme o conhecimento em prática diária[cite: 2].
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- MÓDULO 05 -->
+        <section id="at" class="tab-content">
+            <div class="header-title">
+                <h1>05. Panorama do Antigo Testamento</h1>
+                <p>A estrutura exegética dos 39 livros do AT[cite: 2].</p>
+            </div>
+
+            <div class="card">
+                <table class="table-custom">
+                    <thead>
+                        <tr>
+                            <th>Divisão</th>
+                            <th>Livros</th>
+                            <th>Foco Principal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Pentateuco (Torá)</strong></td>
+                            <td>Gênesis a Deuteronômio (5)[cite: 2]</td>
+                            <td>Criação, formação da nação de Israel, Aliança e Leis[cite: 2].</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Históricos</strong></td>
+                            <td>Josué a Ester (12)[cite: 2]</td>
+                            <td>Conquista de Canaã, Monarquia, Exílio e Restauração[cite: 2].</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Poéticos e Sabedoria</strong></td>
+                            <td>Jó a Cânticos (5)[cite: 2]</td>
+                            <td>Sofrimento humano, adoração, sabedoria prática e amor[cite: 2].</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Profetas (Maiores e Menores)</strong></td>
+                            <td>Isaías a Malaquias (17)[cite: 2]</td>
+                            <td>Alertas contra injustiças, chamados ao arrependimento e promessas do Messias[cite: 2].</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- MÓDULO 06 -->
+        <section id="nt" class="tab-content">
+            <div class="header-title">
+                <h1>06. Panorama do Novo Testamento</h1>
+                <p>A estrutura exegética dos 27 livros do NT[cite: 2].</p>
+            </div>
+
+            <div class="card">
+                <table class="table-custom">
+                    <thead>
+                        <tr>
+                            <th>Divisão</th>
+                            <th>Livros</th>
+                            <th>Foco Principal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Evangelhos</strong></td>
+                            <td>Mateus, Marcos, Lucas, João (4)[cite: 2]</td>
+                            <td>A vida, ensinamentos, morte e ressurreição do Messias[cite: 2].</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Histórico</strong></td>
+                            <td>Atos dos Apóstolos (1)[cite: 2]</td>
+                            <td>A vinda do Espírito Santo e a expansão da Igreja primitiva[cite: 2].</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Epístolas Paulinas</strong></td>
+                            <td>Romanos a Filemom (13)[cite: 2]</td>
+                            <td>Doutrina cristã, vida prática e liderança eclesiástica[cite: 2].</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Epístolas Gerais & Profético</strong></td>
+                            <td>Hebreus a Apocalipse (9)[cite: 2]</td>
+                            <td>Perseverança na fé, combate a heresias e triunfo final de Deus[cite: 2].</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- MÓDULO 07 -->
+        <section id="plano" class="tab-content">
+            <div class="header-title">
+                <h1>07. Plano Mestre de Leitura em 52 Semanas</h1>
+                <p>Cronograma integrado para ler toda a Bíblia de forma equilibrada[cite: 2].</p>
+            </div>
+
+            <div class="card">
+                <div class="grid-2">
+                    <div style="background: rgba(0,0,0,0.3); padding: 18px; border-radius: 10px;">
+                        <h4 style="color: var(--gold-primary);">Semana 01-02</h4>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 6px;">
+                            • AT: Gênesis 1-25<br>
+                            • Poesia: Salmos 1-10<br>
+                            • NT: Mateus 1-7[cite: 2]
+                        </p>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.3); padding: 18px; border-radius: 10px;">
+                        <h4 style="color: var(--gold-primary);">Semana 03-04</h4>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-top: 6px;">
+                            • AT: Gênesis 26-50<br>
+                            • Poesia: Salmos 11-20<br>
+                            • NT: Mateus 8-14[cite: 2]
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MÓDULO 08 -->
+        <section id="ficha" class="tab-content">
+            <div class="header-title">
+                <h1>08. Ficha Interativa de Estudo</h1>
+                <p>Registe o seu progresso diretamente no seu navegador.</p>
+            </div>
+
+            <div class="card">
+                <form class="ficha-form" onsubmit="event.preventDefault(); alert('Estudo registado com sucesso!');">
+                    <label>Passagem Bíblica (Ex: Filipenses 4:1-13):</label>
+                    <input type="text" placeholder="Digite o livro, capítulo e versículos...">
+
+                    <label>1. Observação (Termos repetidos, verbos, conexões):</label>
+                    <textarea rows="3" placeholder="Anote os detalhes observados..."></textarea>
+
+                    <label>2. Interpretação (Qual o significado para os leitores originais?):</label>
+                    <textarea rows="3" placeholder="Anote o contexto e a mensagem principal..."></textarea>
+
+                    <label>3. Aplicação (Como posso aplicar este ensinamento hoje?):</label>
+                    <textarea rows="3" placeholder="Escreva passos práticos..."></textarea>
+
+                    <button type="submit" class="btn-salvar"><i class="fa-solid fa-floppy-disk"></i> Guardar Estudo</button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-item button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
